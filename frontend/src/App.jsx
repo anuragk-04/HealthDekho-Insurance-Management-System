@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import PolicyRegistration from "./pages/PolicyRegistration";
 import Recommendations from "./pages/Recommendations";
+import ProductDetails from "./pages/ProductDetails";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/products/details" element={<ProductDetails />} />
         <Route
           path="/policies/register"
           element={<PolicyRegistration />}

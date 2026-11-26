@@ -114,8 +114,8 @@ function Dashboard() {
   const formatType = (type) =>
     type?.replaceAll("_", " ") || "—";
 
-  const registerProduct = (product) => {
-    navigate("/policies/register", {
+  const exploreProduct = (product) => {
+    navigate("/products/details", {
       state: { product },
     });
   };
@@ -315,8 +315,10 @@ function Dashboard() {
                           </td>
                           <td>
                             {policy.termYears
-                                ? `${policy.termYears} ${policy.termYears === 1 ? "year" : "years"}`
-                                : "—"}
+                              ? `${policy.termYears} ${
+                                  policy.termYears === 1 ? "year" : "years"
+                                }`
+                              : "—"}
                           </td>
                           <td>{formatDate(policy.startDate)}</td>
                           <td>{formatDate(policy.maturityDate)}</td>
@@ -407,9 +409,9 @@ function Dashboard() {
                           <td>
                             <button
                               className="table-register-button"
-                              onClick={() => registerProduct(product)}
+                              onClick={() => exploreProduct(product)}
                             >
-                              Register
+                              Explore
                             </button>
                           </td>
                         </tr>

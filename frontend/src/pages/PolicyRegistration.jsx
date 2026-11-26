@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   ShieldCheck,
@@ -8,6 +8,8 @@ import {
   ArrowLeft,
   CheckCircle,
   LoaderCircle,
+  User,
+  Clock,
 } from "lucide-react";
 import api from "../services/api";
 
@@ -17,36 +19,116 @@ function PolicyRegistration() {
 
   const product = location.state?.product;
 
+  const [customer, setCustomer] = useState(null);
+  const [loadingCustomer, setLoadingCustomer] = useState(true);
+
   const [termYears, setTermYears] = useState(
     product?.minTermYears ?? 1
   );
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
 
-  if (!product) {
-    return (
-      <div className="registration-page">
-        <div className="registration-card">
-          <h2>No insurance product selected</h2>
-          <p>Please select an insurance product before registering.</p>
-          <button
-            className="primary-button"
-            onClick={() => navigate("/dashboard")}
-          >
-            Back to Dashboard
-          </button>
-        </div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const loadCustomer = async () => {
+      if (!localStorage.getItem("token")) {
+        navigate("/login");
+        return;
+      }
+
+      try {
+        const response = await api.get("/customers/me");
+        setCustomer(response.data);
+      } catch (err) {
+        if (
+          err.response?.status === 401 ||
+          err.response?.status === 403
+        ) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("customer");
+          navigate("/login");
+          return;
+        }
+
+        setError("Unable to load customer information.");
+      } finally {
+        setLoadingCustomer(false);
+      }
+    };
+
+    loadCustomer();
+  }, [navigate]);
 
   const formatCurrency = (amount) =>
     new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
-      maximumFractionDigits: 0,
+      maximumFractionDigits: 2,
     }).format(amount || 0);
+
+  const formatDate = (date) => {
+    if (!date) return "—";
+
+    return new Date(`${date}T00:00:00`).toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  const frequencyMonths = {
+    MONTHLY: 1,
+    QUARTERLY: 3,
+    HALF_YEARLY: 6,
+    YEARLY: 12,
+  };
+
+  const normalizedFrequency = product?.premiumFrequency
+    ?.toUpperCase()
+    .replaceAll("-", "_")
+    .replaceAll(" ", "_");
+
+  const monthsBetweenInstallments =
+    frequencyMonths[normalizedFrequency];
+
+  const validTerm =
+    Number.isInteger(Number(termYears)) &&
+    Number(termYears) >= product?.minTermYears &&
+    Number(termYears) <= product?.maxTermYears;
+
+  const premiumPreview = useMemo(() => {
+    if (
+      !product ||
+      !monthsBetweenInstallments ||
+      !validTerm ||
+      Number(product.premiumAmount) <= 0
+    ) {
+      return null;
+    }
+
+    const totalMonths = Number(termYears) * 12;
+
+    if (totalMonths % monthsBetweenInstallments !== 0) {
+      return null;
+    }
+
+    const installmentCount =
+      totalMonths / monthsBetweenInstallments;
+
+    const totalPremium =
+      Number(product.premiumAmount) * installmentCount;
+
+    return {
+      installmentCount,
+      totalPremium,
+    };
+  }, [
+    product,
+    termYears,
+    monthsBetweenInstallments,
+    validTerm,
+  ]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,12 +146,39 @@ function PolicyRegistration() {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-        "Unable to register this policy. Please try again."
+          "Unable to register this policy. Please try again."
       );
     } finally {
       setLoading(false);
     }
   };
+
+  if (!product) {
+    return (
+      <div className="registration-page">
+        <div className="registration-card">
+          <h2>No insurance product selected</h2>
+          <p>Please select an insurance product before registering.</p>
+
+          <button
+            className="primary-button"
+            onClick={() => navigate("/dashboard")}
+          >
+            Back to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (loadingCustomer) {
+    return (
+      <div className="dashboard-loading">
+        <LoaderCircle className="spin" size={28} />
+        <p>Loading registration details...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="registration-page">
@@ -88,14 +197,57 @@ function PolicyRegistration() {
               <span className="dashboard-eyebrow">
                 INSURANCE ENROLLMENT
               </span>
+
               <h1>Register Your Policy</h1>
+
               <p>
-                Review your selected insurance product and choose
-                your preferred policy term.
+                Review your customer details, selected product and
+                premium breakdown before registration.
               </p>
             </div>
 
+            {/* Customer Information */}
+            <section className="registration-info-card">
+              <div className="registration-section-title">
+                <User size={21} />
+                <div>
+                  <h2>Customer Information</h2>
+                  <p>Automatically retrieved from your profile</p>
+                </div>
+              </div>
+
+              <div className="registration-product-details">
+                <div>
+                  <span>Customer name</span>
+                  <strong>{customer?.fullName || "—"}</strong>
+                </div>
+
+                <div>
+                  <span>Date of birth</span>
+                  <strong>
+                    {formatDate(customer?.dateOfBirth)}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>Email address</span>
+                  <strong>{customer?.email || "—"}</strong>
+                </div>
+
+                <div>
+                  <span>Contact information</span>
+                  <strong>
+                    {customer?.phoneNumber ||
+                      customer?.phone ||
+                      customer?.contactNumber ||
+                      "Not available"}
+                  </strong>
+                </div>
+              </div>
+            </section>
+
             <div className="registration-grid">
+              {/* Selected Product */}
               <section className="registration-product">
                 <div className="registration-product-icon">
                   <ShieldCheck size={30} />
@@ -150,10 +302,12 @@ function PolicyRegistration() {
                 </div>
               </section>
 
+              {/* Registration Form */}
               <section className="registration-form-card">
                 <h2>Policy Details</h2>
+
                 <p className="registration-subtitle">
-                  Select your preferred policy duration.
+                  Select your policy duration.
                 </p>
 
                 <form onSubmit={handleSubmit}>
@@ -169,7 +323,9 @@ function PolicyRegistration() {
                       max={product.maxTermYears}
                       step="1"
                       value={termYears}
-                      onChange={(e) => setTermYears(e.target.value)}
+                      onChange={(e) =>
+                        setTermYears(e.target.value)
+                      }
                       required
                     />
 
@@ -181,6 +337,7 @@ function PolicyRegistration() {
 
                   <div className="registration-note">
                     <Calendar size={19} />
+
                     <div>
                       <strong>Policy start date</strong>
                       <span>
@@ -189,19 +346,69 @@ function PolicyRegistration() {
                     </div>
                   </div>
 
-                  <div className="registration-note">
-                    <IndianRupee size={19} />
-                    <div>
-                      <strong>Premium calculation</strong>
-                      <span>
-                        Total premium and installment schedule will be
-                        calculated by the server.
-                      </span>
+                  {/* Premium Breakdown */}
+                  <div className="premium-breakdown">
+                    <div className="premium-breakdown-heading">
+                      <IndianRupee size={20} />
+                      <h3>Premium Breakdown</h3>
                     </div>
+
+                    <div className="premium-breakdown-row">
+                      <span>Payment frequency</span>
+                      <strong>
+                        {product.premiumFrequency}
+                      </strong>
+                    </div>
+
+                    <div className="premium-breakdown-row">
+                      <span>Premium per installment</span>
+                      <strong>
+                        {formatCurrency(product.premiumAmount)}
+                      </strong>
+                    </div>
+
+                    <div className="premium-breakdown-row">
+                      <span>Number of installments</span>
+                      <strong>
+                        {premiumPreview?.installmentCount ?? "—"}
+                      </strong>
+                    </div>
+
+                    <div className="premium-breakdown-row">
+                      <span>Policy duration</span>
+                      <strong>
+                        {termYears || "—"} years
+                      </strong>
+                    </div>
+
+                    <div className="premium-breakdown-total">
+                      <span>Total Premium Payable</span>
+                      <strong>
+                        {premiumPreview
+                          ? formatCurrency(premiumPreview.totalPremium)
+                          : "—"}
+                      </strong>
+                    </div>
+
+                    <p className="premium-breakdown-hint">
+                      Calculated using the product's configured
+                      payment frequency and premium amount.
+                      Final values are calculated and validated by
+                      the server.
+                    </p>
                   </div>
 
                   {error && (
-                    <div className="error-message">{error}</div>
+                    <div className="error-message">
+                      {error}
+                    </div>
+                  )}
+
+                  {!monthsBetweenInstallments && (
+                    <div className="error-message">
+                      The configured premium frequency is not supported.
+                      Please contact support.
+                    </div>
                   )}
 
                   <button
@@ -209,14 +416,17 @@ function PolicyRegistration() {
                     className="auth-submit"
                     disabled={
                       loading ||
-                      !Number.isInteger(Number(termYears)) ||
-                      Number(termYears) < product.minTermYears ||
-                      Number(termYears) > product.maxTermYears
+                      !validTerm ||
+                      !premiumPreview ||
+                      !customer
                     }
                   >
                     {loading ? (
                       <>
-                        <LoaderCircle className="spin" size={17} />
+                        <LoaderCircle
+                          className="spin"
+                          size={17}
+                        />
                         Registering...
                       </>
                     ) : (
@@ -261,22 +471,31 @@ function PolicyRegistration() {
 
               <div>
                 <span>Start date</span>
-                <strong>{result.startDate}</strong>
+                <strong>{formatDate(result.startDate)}</strong>
               </div>
 
               <div>
                 <span>Maturity date</span>
-                <strong>{result.maturityDate}</strong>
+                <strong>{formatDate(result.maturityDate)}</strong>
               </div>
 
               <div>
-                <span>Premium amount</span>
-                <strong>{formatCurrency(result.premiumAmount)}</strong>
+                <span>Premium frequency</span>
+                <strong>{product.premiumFrequency}</strong>
               </div>
 
               <div>
-                <span>Total premium</span>
-                <strong>{formatCurrency(result.totalPremium)}</strong>
+                <span>Premium per installment</span>
+                <strong>
+                  {formatCurrency(result.premiumAmount)}
+                </strong>
+              </div>
+
+              <div>
+                <span>Total premium payable</span>
+                <strong>
+                  {formatCurrency(result.totalPremium)}
+                </strong>
               </div>
 
               <div>
@@ -287,6 +506,17 @@ function PolicyRegistration() {
               <div>
                 <span>Status</span>
                 <strong>{result.status}</strong>
+              </div>
+            </div>
+
+            <div className="registration-note">
+              <Clock size={19} />
+              <div>
+                <strong>Installment schedule generated</strong>
+                <span>
+                  Your installment schedule has been saved with your
+                  registered policy.
+                </span>
               </div>
             </div>
 

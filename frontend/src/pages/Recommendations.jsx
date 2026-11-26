@@ -61,6 +61,7 @@ function Recommendations() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     setError("");
     setRecommendations([]);
     setRequestId(null);
@@ -98,7 +99,7 @@ function Recommendations() {
         String(product.id) === String(recommendedProduct.productId)
     );
 
-  const handleRegister = (recommendedProduct) => {
+  const handleExplore = (recommendedProduct) => {
     const selectedProduct = getProductDetails(recommendedProduct);
 
     if (!selectedProduct) {
@@ -108,8 +109,14 @@ function Recommendations() {
       return;
     }
 
-    navigate("/policies/register", {
-      state: { product: selectedProduct },
+    navigate("/products/details", {
+      state: {
+        product: selectedProduct,
+        recommendation: {
+          rationale: recommendedProduct.rationale,
+          suitability: recommendedProduct.suitability,
+        },
+      },
     });
   };
 
@@ -378,10 +385,10 @@ function Recommendations() {
                           <td>
                             <button
                               className="table-register-button"
-                              onClick={() => handleRegister(item)}
+                              onClick={() => handleExplore(item)}
                               disabled={!product}
                             >
-                              Register
+                              Explore
                             </button>
                           </td>
                         </tr>
