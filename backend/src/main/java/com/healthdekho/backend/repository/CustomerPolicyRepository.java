@@ -20,4 +20,5 @@ public interface CustomerPolicyRepository
             Long customerId,
             Long productId
     );
+    List<CustomerPolicy> findByCustomer_EmailOrderByStartDateDesc(String email);
 }
