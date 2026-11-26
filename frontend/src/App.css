@@ -1,0 +1,1286 @@
+
+.auth-container {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.auth-brand-panel {
+  background: linear-gradient(145deg, #073b3a, #087c70);
+  color: white;
+  padding: 42px 9%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.brand-logo,
+.mobile-logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-family: "Manrope", sans-serif;
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.brand-content {
+  max-width: 500px;
+  margin: 50px auto;
+}
+
+.brand-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.13);
+  display: grid;
+  place-items: center;
+  margin-bottom: 28px;
+}
+
+.brand-content h1 {
+  font: 800 clamp(34px, 4vw, 52px)/1.18 "Manrope", sans-serif;
+  letter-spacing: -1.5px;
+  margin: 0 0 22px;
+}
+
+.brand-content > p {
+  color: #d0e7e2;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.brand-features {
+  display: grid;
+  gap: 16px;
+  margin-top: 38px;
+  color: #e4f4ef;
+  font-size: 14px;
+}
+
+.brand-footer {
+  font-size: 12px;
+  color: #c0ddd6;
+}
+
+.auth-form-panel {
+  display: grid;
+  place-items: center;
+  padding: 45px 8%;
+  background: #fbfdfc;
+}
+
+.auth-form-wrapper {
+  width: 100%;
+  max-width: 420px;
+}
+
+.mobile-logo {
+  display: none;
+  color: #087c70;
+  margin-bottom: 45px;
+}
+
+.auth-heading {
+  margin-bottom: 36px;
+}
+
+.eyebrow {
+  color: #078b7d;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.auth-heading h2 {
+  font: 800 32px/1.3 "Manrope", sans-serif;
+  letter-spacing: -0.8px;
+  margin: 12px 0 9px;
+}
+
+.auth-heading p {
+  color: #71808b;
+  font-size: 14px;
+}
+
+.form-group {
+  display: grid;
+  gap: 9px;
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #263d4b;
+}
+
+.form-group input {
+  width: 100%;
+  height: 51px;
+  border: 1px solid #dce5e4;
+  border-radius: 9px;
+  padding: 0 15px;
+  outline: none;
+  background: white;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #078b7d;
+  box-shadow: 0 0 0 3px rgba(7, 139, 125, 0.1);
+}
+
+.form-group input::placeholder {
+  color: #a5afb5;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 48px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  color: #71808b;
+  display: flex;
+  align-items: center;
+}
+
+.auth-submit {
+  width: 100%;
+  height: 52px;
+  border: none;
+  border-radius: 9px;
+  background: #087c70;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  margin-top: 7px;
+  transition: 0.2s;
+}
+
+.auth-submit:hover {
+  background: #06675d;
+}
+
+.auth-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: #fff0ef;
+  color: #bd3933;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 28px;
+  color: #71808b;
+  font-size: 13px;
+}
+
+.auth-switch a {
+  color: #087c70;
+  font-weight: 700;
+}
+
+.security-note {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  color: #84928e;
+  font-size: 12px;
+}
+
+@media (max-width: 850px) {
+  .auth-container {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-brand-panel {
+    display: none;
+  }
+
+  .auth-form-panel {
+    min-height: 100vh;
+    padding: 35px 24px;
+  }
+
+  .mobile-logo {
+    display: flex;
+  }
+}
+
+
+.success-message {
+  background: #e9f8f0;
+  color: #167647;
+  border: 1px solid #c5ead5;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+
+/* ================================
+   HEALTHDEKHO CUSTOMER DASHBOARD
+================================ */
+
+.dashboard-layout {
+  min-height: 100vh;
+  display: flex;
+  background: #f5f8f7;
+}
+
+.dashboard-sidebar {
+  width: 255px;
+  background: #073f3c;
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.dashboard-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font: 800 21px "Manrope", sans-serif;
+  padding: 0 10px;
+  margin-bottom: 60px;
+}
+
+.sidebar-label {
+  color: #8fb9b1;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  padding: 0 12px;
+  margin-bottom: 15px;
+}
+
+.sidebar-nav {
+  display: grid;
+  gap: 9px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 14px;
+  color: #d0e5df;
+  border-radius: 9px;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  background: #087c70;
+  color: white;
+}
+
+.sidebar-logout {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 14px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: transparent;
+  color: white;
+  border-radius: 9px;
+  font-size: 13px;
+}
+
+.sidebar-logout:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.dashboard-main {
+  margin-left: 255px;
+  width: calc(100% - 255px);
+  padding: 35px 45px;
+  max-width: 1700px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.dashboard-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  color: #078b7d;
+  letter-spacing: 1.8px;
+}
+
+.dashboard-header h1 {
+  font: 800 29px "Manrope", sans-serif;
+  margin: 6px 0 0;
+}
+
+.dashboard-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 43px;
+  height: 43px;
+  background: #dff3ed;
+  color: #087c70;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.dashboard-user strong,
+.dashboard-user span {
+  display: block;
+}
+
+.dashboard-user strong {
+  font-size: 13px;
+}
+
+.dashboard-user span {
+  font-size: 11px;
+  color: #84928e;
+  margin-top: 4px;
+}
+
+.welcome-banner {
+  background: linear-gradient(115deg, #087c70, #07544e);
+  color: white;
+  border-radius: 15px;
+  padding: 32px 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+.welcome-banner > div:first-child {
+  max-width: 600px;
+}
+
+.welcome-banner span {
+  color: #b8e6dc;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+}
+
+.welcome-banner h2 {
+  font: 800 30px "Manrope", sans-serif;
+  margin: 12px 0;
+}
+
+.welcome-banner p {
+  color: #d5eee8;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.welcome-icon {
+  width: 115px;
+  height: 115px;
+  border-radius: 30px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,0.12);
+  flex-shrink: 0;
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 38px;
+}
+
+.stat-card {
+  background: white;
+  border: 1px solid #e8eeeb;
+  border-radius: 12px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+}
+
+.stat-icon.teal {
+  color: #087c70;
+  background: #e3f5ef;
+}
+
+.stat-icon.blue {
+  color: #3976bd;
+  background: #e9f1fb;
+}
+
+.stat-icon.purple {
+  color: #8060b9;
+  background: #f1eafa;
+}
+
+.stat-card span {
+  font-size: 11px;
+  color: #82908b;
+}
+
+.stat-card h3 {
+  font: 800 25px "Manrope", sans-serif;
+  margin: 5px 0 0;
+}
+
+.dashboard-section {
+  margin-bottom: 40px;
+  scroll-margin-top: 25px;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-heading h2 {
+  font: 800 19px "Manrope", sans-serif;
+  margin: 0 0 6px;
+}
+
+.section-heading p {
+  color: #85928e;
+  font-size: 12px;
+  margin: 0;
+}
+
+.policy-grid,
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.policy-card,
+.available-product-card {
+  background: white;
+  border: 1px solid #e7eeeb;
+  border-radius: 13px;
+  padding: 23px;
+  transition: 0.2s;
+}
+
+.policy-card:hover,
+.available-product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 25px rgba(24, 64, 55, 0.07);
+}
+
+.policy-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-icon,
+.product-card-icon {
+  width: 43px;
+  height: 43px;
+  background: #e4f5ef;
+  color: #087c70;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+}
+
+.status-badge {
+  background: #e7f7ee;
+  color: #18814b;
+  padding: 6px 11px;
+  border-radius: 30px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.policy-card h3,
+.available-product-card h3 {
+  font: 700 16px "Manrope", sans-serif;
+  margin: 17px 0 7px;
+}
+
+.policy-number {
+  font-size: 11px;
+  color: #84928e;
+}
+
+.policy-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  border-top: 1px solid #edf1ef;
+  padding-top: 18px;
+  margin-top: 20px;
+}
+
+.policy-details span,
+.policy-details strong {
+  display: block;
+}
+
+.policy-details span,
+.product-info span {
+  font-size: 10px;
+  color: #87938f;
+  margin-bottom: 6px;
+}
+
+.policy-details strong,
+.product-info strong {
+  font-size: 12px;
+}
+
+.empty-state {
+  background: white;
+  border: 1px dashed #cddbd5;
+  border-radius: 12px;
+  padding: 40px 20px;
+  text-align: center;
+  color: #087c70;
+}
+
+.empty-state h3 {
+  font: 700 16px "Manrope", sans-serif;
+  color: #263d4b;
+  margin: 14px 0 7px;
+}
+
+.empty-state p {
+  color: #85928e;
+  font-size: 12px;
+}
+
+.product-type {
+  display: inline-block;
+  color: #087c70;
+  background: #e7f6f1;
+  padding: 6px 9px;
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  margin-top: 17px;
+}
+
+.available-product-card h3 {
+  margin-top: 12px;
+}
+
+.available-product-card > p {
+  color: #82908b;
+  font-size: 12px;
+  line-height: 1.7;
+  min-height: 40px;
+}
+
+.product-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid #edf1ef;
+  padding-top: 17px;
+  margin-top: 18px;
+}
+
+.product-info span,
+.product-info strong {
+  display: block;
+}
+
+.product-term {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #788983;
+  font-size: 11px;
+  margin-top: 17px;
+}
+
+.ai-promo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #edf7f3;
+  border: 1px solid #d7ebe2;
+  border-radius: 13px;
+  padding: 24px;
+  margin-bottom: 35px;
+}
+
+.ai-promo-icon {
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: #d7eee4;
+  color: #087c70;
+}
+
+.ai-promo > div:nth-child(2) {
+  flex: 1;
+}
+
+.ai-promo h2 {
+  font: 800 16px "Manrope", sans-serif;
+  margin: 0 0 7px;
+}
+
+.ai-promo p {
+  color: #71847c;
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.ai-promo-button {
+  background: #087c70;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ai-promo-button:hover {
+  background: #06675d;
+}
+
+.dashboard-footer {
+  text-align: center;
+  color: #99a59f;
+  font-size: 11px;
+  padding: 15px;
+}
+
+.dashboard-loading {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  color: #087c70;
+}
+
+.dashboard-loading p {
+  font-size: 13px;
+}
+
+.spin {
+  animation: dashboard-spin 1s linear infinite;
+}
+
+@keyframes dashboard-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dashboard-error {
+  margin-bottom: 20px;
+}
+
+.dashboard-error button {
+  margin-left: 15px;
+  border: none;
+  background: transparent;
+  color: #087c70;
+  font-weight: 700;
+}
+
+@media (max-width: 1100px) {
+  .dashboard-sidebar {
+    width: 220px;
+  }
+
+  .dashboard-main {
+    margin-left: 220px;
+    width: calc(100% - 220px);
+    padding: 30px 25px;
+  }
+
+  .dashboard-stats {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 850px) {
+  .dashboard-sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    padding: 18px;
+  }
+
+  .dashboard-layout {
+    display: block;
+  }
+
+  .dashboard-brand {
+    margin-bottom: 20px;
+  }
+
+  .sidebar-label {
+    display: none;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .sidebar-link {
+    padding: 10px;
+  }
+
+  .sidebar-logout {
+    margin-top: 15px;
+    width: fit-content;
+  }
+
+  .dashboard-main {
+    width: 100%;
+    margin: 0;
+    padding: 25px 18px;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-header {
+    align-items: flex-start;
+    gap: 15px;
+    flex-direction: column;
+  }
+
+  .welcome-banner {
+    padding: 24px;
+  }
+
+  .welcome-icon {
+    display: none;
+  }
+
+  .policy-grid,
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-promo {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .ai-promo-button {
+    width: 100%;
+  }
+}
+
+
+/* POLICY REGISTRATION PAGE */
+
+.registration-page {
+  min-height: 100vh;
+  background: #f5f8f7;
+  padding: 40px 24px;
+}
+
+.registration-container {
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  color: #087c70;
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 30px;
+}
+
+.registration-heading {
+  margin-bottom: 28px;
+}
+
+.registration-heading h1,
+.registration-success h1 {
+  font: 800 30px "Manrope", sans-serif;
+  margin: 10px 0;
+}
+
+.registration-heading p,
+.registration-success > p {
+  color: #82908b;
+  font-size: 13px;
+}
+
+.registration-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.registration-product,
+.registration-form-card {
+  background: white;
+  border: 1px solid #e7eeeb;
+  border-radius: 14px;
+  padding: 28px;
+}
+
+.registration-product-icon {
+  width: 55px;
+  height: 55px;
+  background: #e4f5ef;
+  color: #087c70;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+}
+
+.registration-product h2,
+.registration-form-card h2 {
+  font: 800 20px "Manrope", sans-serif;
+  margin: 17px 0 9px;
+}
+
+.registration-product > p {
+  color: #82908b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.registration-product-details {
+  border-top: 1px solid #edf1ef;
+  margin-top: 25px;
+  padding-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px 15px;
+}
+
+.registration-product-details span,
+.registration-product-details strong {
+  display: block;
+}
+
+.registration-product-details span,
+.registration-result span {
+  color: #84928e;
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.registration-product-details strong {
+  font-size: 12px;
+}
+
+.registration-subtitle {
+  color: #82908b;
+  font-size: 12px;
+  margin-bottom: 27px;
+}
+
+.field-hint {
+  color: #87938f;
+  font-size: 11px;
+}
+
+.registration-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #edf7f3;
+  color: #087c70;
+  border-radius: 9px;
+  padding: 14px;
+  margin: 18px 0;
+}
+
+.registration-note strong,
+.registration-note span {
+  display: block;
+}
+
+.registration-note strong {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.registration-note span {
+  color: #71847c;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.registration-form-card .auth-submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.register-product-button {
+  width: 100%;
+  margin-top: 18px;
+  border: none;
+  background: #087c70;
+  color: white;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.register-product-button:hover {
+  background: #06675d;
+}
+
+.registration-success {
+  max-width: 650px;
+  margin: 40px auto;
+  background: white;
+  border: 1px solid #e7eeeb;
+  border-radius: 16px;
+  padding: 35px;
+  text-align: center;
+}
+
+.success-icon {
+  color: #16844f;
+  margin-bottom: 20px;
+}
+
+.registration-result {
+  text-align: left;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background: #f6faf8;
+  border-radius: 12px;
+  padding: 23px;
+  margin: 28px 0;
+}
+
+.registration-result span,
+.registration-result strong {
+  display: block;
+}
+
+.registration-result strong {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 750px) {
+  .registration-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .registration-result {
+    grid-template-columns: 1fr;
+  }
+
+  .registration-page {
+    padding: 25px 15px;
+  }
+}
+
+
+/* AI RECOMMENDATIONS PAGE */
+
+.recommendations-page {
+  min-height: 100vh;
+  background: #f5f8f7;
+  padding: 40px 24px;
+}
+
+.recommendations-container {
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+.recommendations-header {
+  text-align: center;
+  max-width: 650px;
+  margin: 15px auto 35px;
+}
+
+.recommendations-heading-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 18px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: #dff3eb;
+  color: #087c70;
+}
+
+.recommendations-header h1 {
+  font: 800 30px "Manrope", sans-serif;
+  margin: 12px 0;
+}
+
+.recommendations-header p {
+  color: #82908b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.recommendation-form-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border: 1px solid #e7eeeb;
+  border-radius: 14px;
+  padding: 30px;
+}
+
+.recommendation-form-card h2,
+.recommendation-results h2 {
+  font: 800 20px "Manrope", sans-serif;
+  margin: 0 0 8px;
+}
+
+.recommendation-form-subtitle {
+  color: #82908b;
+  font-size: 12px;
+  margin-bottom: 27px;
+}
+
+.recommendation-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.recommendation-form-grid .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.recommendation-form-grid label {
+  color: #263d4b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.recommendation-form-grid input,
+.recommendation-form-grid select,
+.recommendation-form-grid textarea {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #dce6e1;
+  border-radius: 8px;
+  outline: none;
+  font: inherit;
+  font-size: 13px;
+  color: #263d4b;
+  background: white;
+}
+
+.recommendation-form-grid input:focus,
+.recommendation-form-grid select:focus,
+.recommendation-form-grid textarea:focus {
+  border-color: #087c70;
+  box-shadow: 0 0 0 3px rgba(8,124,112,0.09);
+}
+
+.recommendation-goals-field {
+  grid-column: 1 / -1;
+}
+
+.recommendation-form-grid textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.recommendation-submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  margin-top: 25px;
+}
+
+.recommendation-error {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.recommendation-results {
+  margin-top: 45px;
+}
+
+.recommendation-results-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #16844f;
+  margin-bottom: 22px;
+}
+
+.recommendation-results-heading h2 {
+  color: #263d4b;
+  margin-top: 8px;
+}
+
+.recommendation-results-heading p {
+  color: #82908b;
+  font-size: 12px;
+}
+
+.recommendation-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.recommendation-card {
+  background: white;
+  border: 1px solid #e7eeeb;
+  border-radius: 13px;
+  padding: 24px;
+  transition: 0.2s;
+}
+
+.recommendation-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 25px rgba(24,64,55,0.07);
+}
+
+.recommendation-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.recommendation-suitability {
+  color: #18814b;
+  background: #e7f7ee;
+  padding: 7px 11px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.recommendation-card h3 {
+  font: 800 17px "Manrope", sans-serif;
+  margin: 13px 0 6px;
+}
+
+.recommendation-product-code {
+  color: #82908b;
+  font-size: 11px;
+}
+
+.recommendation-rationale {
+  background: #f5f9f7;
+  border-radius: 9px;
+  padding: 15px;
+  margin: 20px 0;
+}
+
+.recommendation-rationale strong {
+  font-size: 12px;
+  color: #087c70;
+}
+
+.recommendation-rationale p {
+  color: #71847c;
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 8px 0 0;
+}
+
+.recommendation-card .register-product-button {
+  margin-top: 0;
+}
+
+@media (max-width: 650px) {
+  .recommendations-page {
+    padding: 25px 15px;
+  }
+
+  .recommendation-form-card {
+    padding: 22px;
+  }
+
+  .recommendation-form-grid,
+  .recommendation-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .recommendation-goals-field {
+    grid-column: auto;
+  }
+
+  .recommendations-header h1 {
+    font-size: 24px;
+  }
+}
