@@ -6,10 +6,12 @@ import com.healthdekho.backend.repository.InsuranceProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.math.BigDecimal;
 
 @Configuration
+@Profile("!prod")
 public class DataSeeder {
 
     @Bean
