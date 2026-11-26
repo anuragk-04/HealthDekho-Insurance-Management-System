@@ -5,7 +5,6 @@ import {
   ArrowLeft,
   Sparkles,
   ShieldCheck,
-  Calendar,
   LoaderCircle,
   CheckCircle,
   AlertCircle,
@@ -86,17 +85,21 @@ function Recommendations() {
 
       setError(
         err.response?.data?.message ||
-        "Unable to generate recommendations. Please try again."
+          "Unable to generate recommendations. Please try again."
       );
     } finally {
       setLoadingRecommendations(false);
     }
   };
 
-  const handleRegister = (recommendedProduct) => {
-    const selectedProduct = products.find(
-      (product) => product.id === recommendedProduct.productId
+  const getProductDetails = (recommendedProduct) =>
+    products.find(
+      (product) =>
+        String(product.id) === String(recommendedProduct.productId)
     );
+
+  const handleRegister = (recommendedProduct) => {
+    const selectedProduct = getProductDetails(recommendedProduct);
 
     if (!selectedProduct) {
       setError(
@@ -109,6 +112,18 @@ function Recommendations() {
       state: { product: selectedProduct },
     });
   };
+
+  const formatCurrency = (amount) =>
+    amount == null
+      ? "—"
+      : new Intl.NumberFormat("en-IN", {
+          style: "currency",
+          currency: "INR",
+          maximumFractionDigits: 0,
+        }).format(amount);
+
+  const formatType = (type) =>
+    type?.replaceAll("_", " ") || "—";
 
   if (loadingProfile) {
     return (
@@ -149,6 +164,7 @@ function Recommendations() {
 
         <section className="recommendation-form-card">
           <h2>Tell us your requirements</h2>
+
           <p className="recommendation-form-subtitle">
             Your information helps us identify relevant insurance products.
           </p>
@@ -156,18 +172,26 @@ function Recommendations() {
           <form onSubmit={handleSubmit}>
             <div className="recommendation-form-grid">
               <div className="form-group">
-                <label htmlFor="recommendationDob">Date of birth</label>
+                <label htmlFor="recommendationDob">
+                  Date of birth
+                </label>
+
                 <input
                   id="recommendationDob"
                   type="date"
                   value={dateOfBirth}
-                  onChange={(event) => setDateOfBirth(event.target.value)}
+                  onChange={(event) =>
+                    setDateOfBirth(event.target.value)
+                  }
                   required
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="preferredTerm">Preferred term (years)</label>
+                <label htmlFor="preferredTerm">
+                  Preferred term (years)
+                </label>
+
                 <input
                   id="preferredTerm"
                   type="number"
@@ -185,6 +209,7 @@ function Recommendations() {
                 <label htmlFor="insuranceType">
                   Preferred insurance type
                 </label>
+
                 <select
                   id="insuranceType"
                   value={preferredInsuranceType}
@@ -203,6 +228,7 @@ function Recommendations() {
                 <label htmlFor="goals">
                   Goals and preferences
                 </label>
+
                 <textarea
                   id="goals"
                   rows="5"
@@ -214,6 +240,7 @@ function Recommendations() {
                   }
                   required
                 />
+
                 <span className="field-hint">
                   {goalsAndPreferences.length}/1000 characters
                 </span>
@@ -260,61 +287,108 @@ function Recommendations() {
                 <span className="dashboard-eyebrow">
                   AI ANALYSIS COMPLETE
                 </span>
+
                 <h2>Your Recommended Products</h2>
+
                 <p>Recommendation request #{requestId}</p>
               </div>
+
               <CheckCircle size={30} />
             </div>
 
             {recommendations.length === 0 ? (
               <div className="empty-state">
                 <ShieldCheck size={35} />
+
                 <h3>No suitable products found</h3>
+
                 <p>
                   Try changing your preferred term or insurance
                   requirements.
                 </p>
               </div>
             ) : (
-              <div className="recommendation-cards">
-                {recommendations.map((item) => (
-                  <article
-                    className="recommendation-card"
-                    key={item.productId}
-                  >
-                    <div className="recommendation-card-top">
-                      <div className="product-card-icon">
-                        <ShieldCheck size={25} />
-                      </div>
+              <div className="recommendation-table-wrapper">
+                <table className="recommendation-table">
+                  <thead>
+                    <tr>
+                      <th>Product Code</th>
+                      <th>Policy Name</th>
+                      <th>Policy Type</th>
+                      <th>Policy Term</th>
+                      <th>Sum Insured</th>
+                      <th>Premium Frequency</th>
+                      <th>Premium Amount</th>
+                      <th>AI Rationale</th>
+                      <th>Suitability</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
 
-                      <span className="recommendation-suitability">
-                        {item.suitability} Suitability
-                      </span>
-                    </div>
+                  <tbody>
+                    {recommendations.map((item) => {
+                      const product = getProductDetails(item);
 
-                    <span className="product-type">
-                      {item.insuranceType?.replaceAll("_", " ")}
-                    </span>
+                      return (
+                        <tr key={item.productId}>
+                          <td className="recommendation-code">
+                            {item.productCode || "—"}
+                          </td>
 
-                    <h3>{item.productName}</h3>
+                          <td className="recommendation-name">
+                            {item.productName || "—"}
+                          </td>
 
-                    <span className="recommendation-product-code">
-                      {item.productCode}
-                    </span>
+                          <td>
+                            {formatType(item.insuranceType)}
+                          </td>
 
-                    <div className="recommendation-rationale">
-                      <strong>Why this product?</strong>
-                      <p>{item.rationale}</p>
-                    </div>
+                          <td>
+                            {preferredTermYears
+                              ? `${preferredTermYears} ${
+                                  Number(preferredTermYears) === 1
+                                    ? "year"
+                                    : "years"
+                                }`
+                              : "—"}
+                          </td>
 
-                    <button
-                      className="register-product-button"
-                      onClick={() => handleRegister(item)}
-                    >
-                      Register This Product
-                    </button>
-                  </article>
-                ))}
+                          <td className="recommendation-amount">
+                            {formatCurrency(product?.sumInsured)}
+                          </td>
+
+                          <td>
+                            {product?.premiumFrequency || "—"}
+                          </td>
+
+                          <td className="recommendation-amount">
+                            {formatCurrency(product?.premiumAmount)}
+                          </td>
+
+                          <td className="recommendation-rationale-cell">
+                            {item.rationale || "—"}
+                          </td>
+
+                          <td>
+                            <span className="recommendation-suitability">
+                              {item.suitability || "—"}
+                            </span>
+                          </td>
+
+                          <td>
+                            <button
+                              className="table-register-button"
+                              onClick={() => handleRegister(item)}
+                              disabled={!product}
+                            >
+                              Register
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             )}
           </section>
