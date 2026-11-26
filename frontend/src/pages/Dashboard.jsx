@@ -9,8 +9,6 @@ import {
   Sparkles,
   LogOut,
   User,
-  Calendar,
-  IndianRupee,
   HeartPulse,
   RefreshCw,
 } from "lucide-react";
@@ -26,12 +24,10 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Track the currently selected dashboard section
   const [activeSection, setActiveSection] = useState(
     window.location.hash.replace("#", "") || "overview"
   );
 
-  // Update active sidebar item when the URL hash changes
   useEffect(() => {
     const updateActiveSection = () => {
       setActiveSection(
@@ -115,6 +111,15 @@ function Dashboard() {
     });
   };
 
+  const formatType = (type) =>
+    type?.replaceAll("_", " ") || "—";
+
+  const registerProduct = (product) => {
+    navigate("/policies/register", {
+      state: { product },
+    });
+  };
+
   if (loading) {
     return (
       <div className="dashboard-loading">
@@ -165,19 +170,13 @@ function Dashboard() {
             Insurance Products
           </a>
 
-          <Link
-            to="/recommendations"
-            className="sidebar-link"
-          >
+          <Link to="/recommendations" className="sidebar-link">
             <Sparkles size={19} />
             AI Recommendations
           </Link>
         </nav>
 
-        <button
-          className="sidebar-logout"
-          onClick={handleLogout}
-        >
+        <button className="sidebar-logout" onClick={handleLogout}>
           <LogOut size={19} />
           Logout
         </button>
@@ -235,7 +234,6 @@ function Dashboard() {
                 <div className="stat-icon teal">
                   <ShieldCheck size={23} />
                 </div>
-
                 <div>
                   <span>Registered Policies</span>
                   <h3>{policies.length}</h3>
@@ -246,7 +244,6 @@ function Dashboard() {
                 <div className="stat-icon blue">
                   <Package size={23} />
                 </div>
-
                 <div>
                   <span>Available Products</span>
                   <h3>{products.length}</h3>
@@ -257,7 +254,6 @@ function Dashboard() {
                 <div className="stat-icon purple">
                   <Sparkles size={23} />
                 </div>
-
                 <div>
                   <span>AI Recommendations</span>
                   <h3>Explore</h3>
@@ -265,6 +261,7 @@ function Dashboard() {
               </div>
             </section>
 
+            {/* FR-1: Registered Policies Table */}
             <section
               className="dashboard-section"
               id="policies"
@@ -285,64 +282,67 @@ function Dashboard() {
                   </p>
                 </div>
               ) : (
-                <div className="policy-grid">
-                  {policies.map((policy) => (
-                    <div
-                      className="policy-card"
-                      key={policy.id}
-                    >
-                      <div className="policy-card-top">
-                        <div className="product-icon">
-                          <ShieldCheck size={23} />
-                        </div>
+                <div className="dashboard-table-wrapper">
+                  <table className="dashboard-table">
+                    <thead>
+                      <tr>
+                        <th>Policy Identifier</th>
+                        <th>Policy Name</th>
+                        <th>Policy Type</th>
+                        <th>Policy Term</th>
+                        <th>Start Date</th>
+                        <th>Maturity Date</th>
+                        <th>Premium Frequency</th>
+                        <th>Premium Amount</th>
+                        <th>Sum Insured</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
 
-                        <span className="status-badge">
-                          {policy.status}
-                        </span>
-                      </div>
-
-                      <h3>{policy.productName}</h3>
-
-                      <span className="policy-number">
-                        {policy.policyNumber}
-                      </span>
-
-                      <div className="policy-details">
-                        <div>
-                          <span>Sum insured</span>
-                          <strong>
+                    <tbody>
+                      {policies.map((policy) => (
+                        <tr key={policy.id}>
+                          <td className="table-code">
+                            {policy.policyNumber || "—"}
+                          </td>
+                          <td className="table-primary">
+                            {policy.productName || "—"}
+                          </td>
+                          <td>
+                            {formatType(
+                              policy.insuranceType || policy.productType
+                            )}
+                          </td>
+                          <td>
+                            {policy.termYears
+                                ? `${policy.termYears} ${policy.termYears === 1 ? "year" : "years"}`
+                                : "—"}
+                          </td>
+                          <td>{formatDate(policy.startDate)}</td>
+                          <td>{formatDate(policy.maturityDate)}</td>
+                          <td>
+                            {policy.premiumFrequency || "—"}
+                          </td>
+                          <td className="table-amount">
+                            {formatCurrency(policy.premiumAmount)}
+                          </td>
+                          <td className="table-amount">
                             {formatCurrency(policy.sumInsured)}
-                          </strong>
-                        </div>
-
-                        <div>
-                          <span>Premium</span>
-                          <strong>
-                            {formatCurrency(policy.premiumAmount)} /{" "}
-                            {policy.premiumFrequency}
-                          </strong>
-                        </div>
-
-                        <div>
-                          <span>Start date</span>
-                          <strong>
-                            {formatDate(policy.startDate)}
-                          </strong>
-                        </div>
-
-                        <div>
-                          <span>Maturity date</span>
-                          <strong>
-                            {formatDate(policy.maturityDate)}
-                          </strong>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                          </td>
+                          <td>
+                            <span className="status-badge">
+                              {policy.status || "—"}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </section>
 
+            {/* FR-1: Available Insurance Products Table */}
             <section
               className="dashboard-section"
               id="products"
@@ -365,56 +365,57 @@ function Dashboard() {
                   </p>
                 </div>
               ) : (
-                <div className="product-grid">
-                  {products.map((product) => (
-                    <div
-                      className="available-product-card"
-                      key={product.id}
-                    >
-                      <div className="product-card-icon">
-                        <HeartPulse size={25} />
-                      </div>
+                <div className="dashboard-table-wrapper">
+                  <table className="dashboard-table">
+                    <thead>
+                      <tr>
+                        <th>Product Code</th>
+                        <th>Policy Name</th>
+                        <th>Policy Type</th>
+                        <th>Policy Term</th>
+                        <th>Sum Insured</th>
+                        <th>Premium Frequency</th>
+                        <th>Premium Amount</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
 
-                      <span className="product-type">
-                        {product.insuranceType?.replaceAll("_", " ")}
-                      </span>
-
-                      <h3>{product.productName}</h3>
-                      <p>{product.description}</p>
-
-                      <div className="product-info">
-                        <div>
-                          <span>Premium</span>
-                          <strong>
-                            {formatCurrency(product.premiumAmount)}
-                          </strong>
-                        </div>
-
-                        <div>
-                          <span>Sum insured</span>
-                          <strong>
+                    <tbody>
+                      {products.map((product) => (
+                        <tr key={product.id}>
+                          <td className="table-code">
+                            {product.productCode || "—"}
+                          </td>
+                          <td className="table-primary">
+                            {product.productName || "—"}
+                          </td>
+                          <td>
+                            {formatType(product.insuranceType)}
+                          </td>
+                          <td>
+                            {product.minTermYears}–{product.maxTermYears} years
+                          </td>
+                          <td className="table-amount">
                             {formatCurrency(product.sumInsured)}
-                          </strong>
-                        </div>
-                      </div>
-
-                      <div className="product-term">
-                        <Calendar size={15} />
-                        {product.minTermYears}–{product.maxTermYears} years
-                      </div>
-
-                      <button
-                        className="register-product-button"
-                        onClick={() =>
-                          navigate("/policies/register", {
-                            state: { product },
-                          })
-                        }
-                      >
-                        Register Now
-                      </button>
-                    </div>
-                  ))}
+                          </td>
+                          <td>
+                            {product.premiumFrequency || "—"}
+                          </td>
+                          <td className="table-amount">
+                            {formatCurrency(product.premiumAmount)}
+                          </td>
+                          <td>
+                            <button
+                              className="table-register-button"
+                              onClick={() => registerProduct(product)}
+                            >
+                              Register
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </section>
