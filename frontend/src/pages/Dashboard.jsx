@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   ShieldCheck,
   LayoutDashboard,
@@ -26,22 +26,48 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Track the currently selected dashboard section
+  const [activeSection, setActiveSection] = useState(
+    window.location.hash.replace("#", "") || "overview"
+  );
+
+  // Update active sidebar item when the URL hash changes
+  useEffect(() => {
+    const updateActiveSection = () => {
+      setActiveSection(
+        window.location.hash.replace("#", "") || "overview"
+      );
+    };
+
+    window.addEventListener("hashchange", updateActiveSection);
+
+    return () => {
+      window.removeEventListener("hashchange", updateActiveSection);
+    };
+  }, []);
+
   const fetchDashboardData = async () => {
     try {
       setError("");
 
-      const [profileResponse, policiesResponse, productsResponse] =
-        await Promise.all([
-          api.get("/customers/me"),
-          api.get("/customers/me/policies"),
-          api.get("/customers/me/available-products"),
-        ]);
+      const [
+        profileResponse,
+        policiesResponse,
+        productsResponse,
+      ] = await Promise.all([
+        api.get("/customers/me"),
+        api.get("/customers/me/policies"),
+        api.get("/customers/me/available-products"),
+      ]);
 
       setCustomer(profileResponse.data);
       setPolicies(policiesResponse.data);
       setProducts(productsResponse.data);
     } catch (err) {
-      if (err.response?.status === 401 || err.response?.status === 403) {
+      if (
+        err.response?.status === 401 ||
+        err.response?.status === 403
+      ) {
         localStorage.removeItem("token");
         localStorage.removeItem("customer");
         navigate("/login");
@@ -50,7 +76,7 @@ function Dashboard() {
 
       setError(
         err.response?.data?.message ||
-        "Unable to load dashboard data. Please try again."
+          "Unable to load dashboard data. Please try again."
       );
     } finally {
       setLoading(false);
@@ -109,28 +135,49 @@ function Dashboard() {
         <div className="sidebar-label">MENU</div>
 
         <nav className="sidebar-nav">
-          <a href="#overview" className="sidebar-link active">
+          <a
+            href="#overview"
+            className={`sidebar-link ${
+              activeSection === "overview" ? "active" : ""
+            }`}
+          >
             <LayoutDashboard size={19} />
             Overview
           </a>
 
-          <a href="#policies" className="sidebar-link">
+          <a
+            href="#policies"
+            className={`sidebar-link ${
+              activeSection === "policies" ? "active" : ""
+            }`}
+          >
             <FileText size={19} />
             My Policies
           </a>
 
-          <a href="#products" className="sidebar-link">
+          <a
+            href="#products"
+            className={`sidebar-link ${
+              activeSection === "products" ? "active" : ""
+            }`}
+          >
             <Package size={19} />
             Insurance Products
           </a>
 
-          <a href="#recommendations" className="sidebar-link">
+          <Link
+            to="/recommendations"
+            className="sidebar-link"
+          >
             <Sparkles size={19} />
             AI Recommendations
-          </a>
+          </Link>
         </nav>
 
-        <button className="sidebar-logout" onClick={handleLogout}>
+        <button
+          className="sidebar-logout"
+          onClick={handleLogout}
+        >
           <LogOut size={19} />
           Logout
         </button>
@@ -139,7 +186,9 @@ function Dashboard() {
       <main className="dashboard-main" id="overview">
         <header className="dashboard-header">
           <div>
-            <span className="dashboard-eyebrow">CUSTOMER PORTAL</span>
+            <span className="dashboard-eyebrow">
+              CUSTOMER PORTAL
+            </span>
             <h1>Dashboard</h1>
           </div>
 
@@ -167,7 +216,9 @@ function Dashboard() {
             <section className="welcome-banner">
               <div>
                 <span>WELCOME TO HEALTHDEKHO</span>
-                <h2>Hello, {customer?.fullName?.split(" ")[0]}!</h2>
+                <h2>
+                  Hello, {customer?.fullName?.split(" ")[0]}!
+                </h2>
                 <p>
                   Manage your insurance coverage and explore plans
                   designed around your needs.
@@ -184,6 +235,7 @@ function Dashboard() {
                 <div className="stat-icon teal">
                   <ShieldCheck size={23} />
                 </div>
+
                 <div>
                   <span>Registered Policies</span>
                   <h3>{policies.length}</h3>
@@ -194,6 +246,7 @@ function Dashboard() {
                 <div className="stat-icon blue">
                   <Package size={23} />
                 </div>
+
                 <div>
                   <span>Available Products</span>
                   <h3>{products.length}</h3>
@@ -204,6 +257,7 @@ function Dashboard() {
                 <div className="stat-icon purple">
                   <Sparkles size={23} />
                 </div>
+
                 <div>
                   <span>AI Recommendations</span>
                   <h3>Explore</h3>
@@ -211,7 +265,10 @@ function Dashboard() {
               </div>
             </section>
 
-            <section className="dashboard-section" id="policies">
+            <section
+              className="dashboard-section"
+              id="policies"
+            >
               <div className="section-heading">
                 <div>
                   <h2>My Insurance Policies</h2>
@@ -230,17 +287,22 @@ function Dashboard() {
               ) : (
                 <div className="policy-grid">
                   {policies.map((policy) => (
-                    <div className="policy-card" key={policy.id}>
+                    <div
+                      className="policy-card"
+                      key={policy.id}
+                    >
                       <div className="policy-card-top">
                         <div className="product-icon">
                           <ShieldCheck size={23} />
                         </div>
+
                         <span className="status-badge">
                           {policy.status}
                         </span>
                       </div>
 
                       <h3>{policy.productName}</h3>
+
                       <span className="policy-number">
                         {policy.policyNumber}
                       </span>
@@ -248,7 +310,9 @@ function Dashboard() {
                       <div className="policy-details">
                         <div>
                           <span>Sum insured</span>
-                          <strong>{formatCurrency(policy.sumInsured)}</strong>
+                          <strong>
+                            {formatCurrency(policy.sumInsured)}
+                          </strong>
                         </div>
 
                         <div>
@@ -261,12 +325,16 @@ function Dashboard() {
 
                         <div>
                           <span>Start date</span>
-                          <strong>{formatDate(policy.startDate)}</strong>
+                          <strong>
+                            {formatDate(policy.startDate)}
+                          </strong>
                         </div>
 
                         <div>
                           <span>Maturity date</span>
-                          <strong>{formatDate(policy.maturityDate)}</strong>
+                          <strong>
+                            {formatDate(policy.maturityDate)}
+                          </strong>
                         </div>
                       </div>
                     </div>
@@ -275,11 +343,16 @@ function Dashboard() {
               )}
             </section>
 
-            <section className="dashboard-section" id="products">
+            <section
+              className="dashboard-section"
+              id="products"
+            >
               <div className="section-heading">
                 <div>
                   <h2>Available Insurance Products</h2>
-                  <p>Explore products you haven't registered for</p>
+                  <p>
+                    Explore products you haven't registered for
+                  </p>
                 </div>
               </div>
 
@@ -287,12 +360,17 @@ function Dashboard() {
                 <div className="empty-state">
                   <Package size={35} />
                   <h3>No new products available</h3>
-                  <p>You're already registered for all available products.</p>
+                  <p>
+                    You're already registered for all available products.
+                  </p>
                 </div>
               ) : (
                 <div className="product-grid">
                   {products.map((product) => (
-                    <div className="available-product-card" key={product.id}>
+                    <div
+                      className="available-product-card"
+                      key={product.id}
+                    >
                       <div className="product-card-icon">
                         <HeartPulse size={25} />
                       </div>
@@ -324,23 +402,27 @@ function Dashboard() {
                         <Calendar size={15} />
                         {product.minTermYears}–{product.maxTermYears} years
                       </div>
+
                       <button
                         className="register-product-button"
                         onClick={() =>
-                            navigate("/policies/register", {
+                          navigate("/policies/register", {
                             state: { product },
-                            })
+                          })
                         }
-                        >
+                      >
                         Register Now
-                        </button>
+                      </button>
                     </div>
                   ))}
                 </div>
               )}
             </section>
 
-            <section className="ai-promo" id="recommendations">
+            <section
+              className="ai-promo"
+              id="recommendations"
+            >
               <div className="ai-promo-icon">
                 <Sparkles size={30} />
               </div>
